@@ -28,8 +28,8 @@ const addSubjectController = async (req, res) => {
   console.log(class_id);
   if (!name) return res.status(400).json(new ApiError(400, 'Subject name required'));
 
-  const {data: existingSubject, error: existingSubjectError} = await supabase.from('subjects').select().eq('name', name).single();
-  if (existingSubject) return res.status(400).json(new ApiError(400, 'Subject already exists'));
+  // const {data: existingSubject, error: existingSubjectError} = await supabase.from('subjects').select().eq('name', name).single();
+  // if (existingSubject) return res.status(400).json(new ApiError(400, 'Subject already exists'));
 
   const { data, error } = await supabase.from('subjects').insert({ name, class_id,id: generateSubjectId() }).select().single();
   if (error) return res.status(500).json(new ApiError(500, error.message));
