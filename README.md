@@ -69,6 +69,5 @@ This project is licensed under the ISC License.
 
 ## 📧 Contact
 
-Jibon Hossen - [Your Email]
+- linkdin/facebok/Instagram: @iamjibonhossen
 
-Project Link: [Your Project URL]
