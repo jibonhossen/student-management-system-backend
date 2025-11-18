@@ -36,6 +36,8 @@ app.use("/api/v1/sms/post", mobileversionRoutes);
 import getversionRoutes from "./routes/get-management.routes.js";
 app.use("/api/v1/sms/get", getversionRoutes);
 
+import mobileRoutes from "./routes/auth.mobile.routes.js";
+app.use("/api/v1/mobile", mobileRoutes);
 
 connectDB().then(() => {
     app.listen(port, () => {
