@@ -30,23 +30,58 @@ const getClassesAssignedToTeacherController = async (req, res) => {
 
   if (error) return res.status(500).json({ error: error.message });
   const classes = data.map(d => d.classes);
-return res.status(200).json(new ApiResponse(200, classes, 'Classes fetched successfully'));
+return res.status(200).json(classes);
 };
 
 // 2. Get subjects a teacher teaches in a class
 const getSubjectsofATeacherController = async (req, res) => {
-  const { teacher_id, class_id } = req.query;
-  if (!teacher_id || !class_id) return res.status(400).json({ error: 'teacher_id and class_id required' });
+  const { teacher_id } = req.query;
 
-  const { data, error } = await supabase
+  if (!teacher_id) {
+    return res.status(400).json({ error: 'teacher_id required' });
+  }
+
+  // Correct destructuring: rename data -> dataofSubjects, error -> errorofSubjects
+  const { data: dataofSubjects, error: errorofSubjects } = await supabase
     .from('teacher_assignments')
-    .select('subjects(*)')
-    .eq('teacher_id', teacher_id)
-    .eq('class_id', class_id);
+    .select('subjects(*), classes(*)')
+    .eq('teacher_id', teacher_id);
 
-  if (error) return     res.status(500).json({ error: error.message });
-  const subjects = data.map(d => d.subjects);
-return res.status(200).json(new ApiResponse(200, subjects, 'Subjects fetched successfully'));
+  if (errorofSubjects) {
+    return res.status(500).json({ error: errorofSubjects.message });
+  }
+
+    console.log(dataofSubjects)
+  if (!dataofSubjects || dataofSubjects.length === 0) {
+    return res
+      .status(200)
+      .json(new ApiResponse(200, [], 'No subjects found for this teacher'));
+  }
+
+  // Group subjects by class
+  const result = dataofSubjects.reduce((acc, item) => {
+    const classId = item.classes.id;
+
+    if (!acc[classId]) {
+      acc[classId] = {
+        class: item.classes,
+        subjects: [],
+      };
+    }
+
+    acc[classId].subjects.push(item.subjects);
+    return acc;
+  }, {});
+
+  const response = Object.values(result);
+
+  return res.status(200).json(
+    new ApiResponse(
+      200,
+      response,
+      'Subjects and classes fetched successfully'
+    )
+  );
 };
 
 // 3. Get students of a class (for teacher to enter results)
