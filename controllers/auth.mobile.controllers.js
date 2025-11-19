@@ -5,23 +5,11 @@ import ApiError from "../utils/api-error.js";
 const mobileLoginController = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) return res.status(400).json(new ApiError(400, 'Email and password required'));
-    const { data, error } = await supabase.auth.signInWithPassword({ email, password });
+    const { data, error } = await supabase.from('teachers').select('*').eq('email', email).eq('password', password);
     if (error) return res.status(500).json(new ApiError(500, error.message));
+
+
     return res.status(200).json(new ApiResponse(200, data, 'Login successful'));
 }
 
-const mobileRegisterController = async (req, res) => {
-    const { email, password } = req.body;
-    if (!email || !password) return res.status(400).json(new ApiError(400, 'Email and password required'));
-    const { data, error } = await supabase.auth.signUp({ email, password });
-    if (error) return res.status(500).json(new ApiError(500, error.message));
-    return res.status(200).json(new ApiResponse(200, data, 'Register successful'));
-}
-
-const mobileLogoutController = async (req, res) => {
-    const { data, error } = await supabase.auth.signOut();
-    if (error) return res.status(500).json(new ApiError(500, error.message));
-    return res.status(200).json(new ApiResponse(200, data, 'Logout successful'));
-}
-
-export { mobileLoginController, mobileRegisterController, mobileLogoutController }
+export { mobileLoginController }
