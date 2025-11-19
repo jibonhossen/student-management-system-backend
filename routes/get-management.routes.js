@@ -7,7 +7,7 @@ const router = Router();
 
 router.route("/all-teachers").get(getAllTeachersController);
 router.route("/all-students").get(getAllStudentsController);
-router.route("/classes-assigned-to-teacher").get(getClassesAssignedToTeacherController);
+router.route("/catt").get(getClassesAssignedToTeacherController);
 router.route("/subjects-of-a-teacher").get(getSubjectsofATeacherController);
 router.route("/students-of-a-class").get(getStudentsOfAClassController);
 router.route("/all-classes").get(getAllClassesController);

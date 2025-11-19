@@ -31,11 +31,13 @@ app.use("/api/v1/auth", authRoutes
 );
 
 import mobileversionRoutes from "./routes/post-management.routes.js";
-app.use("/api/v1/sms/post", mobileversionRoutes);
+app.use("/api/v1/post", mobileversionRoutes);
 
 import getversionRoutes from "./routes/get-management.routes.js";
-app.use("/api/v1/sms/get", getversionRoutes);
+app.use("/api/v1/get", getversionRoutes);
 
+import mobileRoutes from "./routes/auth.mobile.routes.js";
+app.use("/api/v1/mobile", mobileRoutes);
 
 connectDB().then(() => {
     app.listen(port, () => {

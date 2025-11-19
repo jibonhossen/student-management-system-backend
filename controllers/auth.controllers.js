@@ -85,14 +85,18 @@ const generateAccessAndRefreshToken = async (userId) => {
 });
 
 const loginController = asyncHandler(async (req, res) => {
+
+    console.log(req.body);
    
 const {email, password,username} = req.body;
-if(!email || !username){
-   return res.status(400).json(new ApiError(400, "email or username is required"));
+if(!username){
+   return res.status(400).json(new ApiError(400, "username is required"));
 }
 
+console.log(email, password,username);
+
 const user = await User.findOne({
-    $or: [{email}]
+    $or: [{username}]
 });
 
 if(!user){
@@ -127,6 +131,7 @@ res.status(200).cookie("accessToken", accessToken, options)
 .json(new ApiResponse(200, {user: loggedInUser,accessToken,refreshToken}, "User logged in successfully"));
 
 })
+
 
 const logOutUser = asyncHandler(async (req, res) => {
  await User.findByIdAndUpdate(

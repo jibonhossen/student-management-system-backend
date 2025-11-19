@@ -83,6 +83,8 @@ const addTeacherAssignmentController = async (req, res) => {
 
 const addResultController = async (req, res) => {
   const { student_id, exam_id, subject_id, marks, comments  } = req.body;
+
+  console.log(req.body);
   if (!student_id || !exam_id || !subject_id || marks === undefined) return res.status(400).json(new ApiError(400, 'Required fields missing'));
 
 
